@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\API\v1\Auth;
 
-use App\User;
+use Illuminate\Http\Request;
+use App\Models\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Contracts\Validation;
+use App\Exceptions\ModelsExceptions\DBException;
+use \Exception;
 
 class AuthController extends Controller
 {
@@ -31,6 +35,29 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'getLogout']);
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function postRegister (Request $request) {
+
+        $data = $request->all();
+        $validate = $this->validator($data);
+
+        if ($validate->fails()) {
+            return response()->json(self::prepareResponse(false, $validate->messages()), 403);
+        }
+        try {
+            $user = $this->create($data);
+        } catch (Exception $e) {
+            throw new DBException('Registration db error.');
+        }
+        return response()->json(self::prepareResponse(true, $user), 200);
+
     }
 
     /**
