@@ -1,4 +1,14 @@
 ## API skeleton based on Laravel 5 framework
+This skeleton have been designed for quick deployment API with JWT authentication, registration and simple CRUD operations. for demo.
+### Realised:
+- JWT authentication
+- Registration
+- Simple CRUD actions
 
-This skeleton will be include JWT Auth and registration and simple CRUD operations for demo.
 
+## Шаблон API сервиса написанный с помощью Laravel 5.1 фреймворка.
+Это шаблон для быстрого развертывания API сервиса с возможностями JWT аутентификации и основными CRUD операциями.
+### Реализовано:
+ - JWT аутентификация
+ - Регистрация
+ - Примитивные CRUD операции

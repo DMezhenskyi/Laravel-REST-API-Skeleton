@@ -4,15 +4,18 @@ namespace App\Http\Controllers\API\v1\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Lang;
 use Validator;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\v1\BaseApiController as ApiController;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Contracts\Validation;
 use App\Exceptions\ModelsExceptions\DBException;
 use \Exception;
+use JWTAuth;
 
-class AuthController extends Controller
+
+class AuthController extends ApiController
 {
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +37,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('jwt.auth', ['except' => ['postLogin','postRegister']]);
     }
 
     /**
@@ -59,6 +62,42 @@ class AuthController extends Controller
         return response()->json(self::prepareResponse(true, $user), 200);
 
     }
+
+    /**
+     * User signin attempts.
+     *
+     * @param  array  $data
+     * @return json
+     */
+    public function postLogin (Request $request) {
+
+        $credentials = $request->only('email', 'password');
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+
+        if ($this->hasTooManyLoginAttempts($request) === true)
+            return response()->json(self::prepareResponse(false, $this->getLockoutErrorMessage($this->lockoutTime())), 401);
+
+        try {
+
+            if ( ! $token = JWTAuth::attempt($credentials)) {
+
+                $this->incrementLoginAttempts($request);
+                $msg[] = Lang::has('auth.failed') ? Lang::get('auth.failed') : 'These credentials do not match our records.';
+                return response()->json(self::prepareResponse(false, $msg), 401);
+            }
+
+            $this->handleUserWasAuthenticated($request, $throttles);
+            $user = User::where('email','=', $request['email'])->firstOrFail();
+
+        } catch (JWTException $e) {
+            $msg[] = Lang::has('auth.failed_token') ? Lang::get('auth.failed_token') : 'Authenticate attempt failed.';
+            return response()->json(self::prepareResponse(false, $msg), 401);
+        }
+
+
+        return response()->json(self::prepareResponse(true, ['user' => $user, 'token' => $token]), 200);
+    }
+
 
     /**
      * Get a validator for an incoming registration request.

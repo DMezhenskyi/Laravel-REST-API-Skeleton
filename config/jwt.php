@@ -21,10 +21,11 @@ return [
     |
     | Specify the length of time (in minutes) that the token will be valid for.
     | Defaults to 1 hour
+    | Changed to 5 days
     |
     */
 
-    'ttl' => 60,
+    'ttl' => 60*24*5,
 
     /*
     |--------------------------------------------------------------------------
@@ -64,7 +65,7 @@ return [
     |
     */
 
-    'user' => 'App\Models\User',
+    'user' => App\Models\User::class,
 
     /*
     |--------------------------------------------------------------------------

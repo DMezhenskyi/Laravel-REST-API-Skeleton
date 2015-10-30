@@ -2,12 +2,15 @@
 
 namespace App\Exceptions;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\v1\BaseApiController as ApiController;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use App\Exceptions\ModelsExceptions\DBException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,11 +47,23 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($e instanceof ModelNotFoundException) {
-            return response()->json(Controller::prepareResponse(true, []), 500);
+            return response()->json(ApiController::prepareResponse(true, []), 404);
         }
 
         if ($e instanceof DBException) {
-            return response()->json(Controller::prepareResponse(false, [$e->getMessage()]), 500);
+            return response()->json(ApiController::prepareResponse(false, [$e->getMessage()]), 500);
+        }
+
+        if ($e instanceof TokenExpiredException) {
+            return response()->json(ApiController::prepareResponse(false, [$e->getMessage()]), $e->getStatusCode());
+        }
+
+        if ($e instanceof TokenInvalidException) {
+            return response()->json(ApiController::prepareResponse(false, [$e->getMessage()]), $e->getStatusCode());
+        }
+
+        if ($e instanceof JWTException) {
+            return response()->json(ApiController::prepareResponse(false, [$e->getMessage()]), $e->getStatusCode());
         }
 
         return parent::render($request, $e);

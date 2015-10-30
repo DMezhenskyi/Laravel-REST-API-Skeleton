@@ -19,9 +19,10 @@ Route::group(['domain' => 'api.v1.example.local', 'namespace' => 'API\v1'], func
 
     Route::get('/user/list/{start?}', ['uses' => 'User\UserController@getList'])->where('start', '[0-9]+');
 
-    Route::resource('user', 'User\UserController', ['except' => ['create', 'edit', 'store', 'destroy']]);
+    Route::resource('user', 'User\UserController', ['except' => ['create', 'store', 'destroy']]);
+    Route::put('/user', ['uses' => 'User\UserController@update']);
     Route::post('/signup', ['uses' => 'Auth\AuthController@postRegister']);
-    Route::post('/signin', ['uses' => 'Auth\AuthController@registration']);
+    Route::post('/signin', ['uses' => 'Auth\AuthController@postLogin']);
 
 });
 
