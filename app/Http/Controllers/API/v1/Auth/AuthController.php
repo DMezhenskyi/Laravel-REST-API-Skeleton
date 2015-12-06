@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\API\v1\Auth;
+namespace German\Http\Controllers\API\v1\Auth;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use German\Models\User;
 use Illuminate\Support\Facades\Lang;
 use Validator;
-use App\Http\Controllers\API\v1\BaseApiController as ApiController;
+use German\Http\Controllers\API\v1\BaseApiController as ApiController;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Contracts\Validation;
-use App\Exceptions\ModelsExceptions\DBException;
+use German\Exceptions\ModelsExceptions\DBException;
 use \Exception;
 use JWTAuth;
 
@@ -37,7 +37,7 @@ class AuthController extends ApiController
      */
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => ['postLogin','postRegister']]);
+        $this->middleware('jwt.auth', ['except' => ['postLogout','postRegister','postLogin']]);
     }
 
     /**
@@ -93,7 +93,6 @@ class AuthController extends ApiController
             $msg[] = Lang::has('auth.failed_token') ? Lang::get('auth.failed_token') : 'Authenticate attempt failed.';
             return response()->json(self::prepareResponse(false, $msg), 401);
         }
-
 
         return response()->json(self::prepareResponse(true, ['user' => $user, 'token' => $token]), 200);
     }

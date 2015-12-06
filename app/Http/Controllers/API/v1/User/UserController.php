@@ -1,21 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\API\v1\User;
+namespace German\Http\Controllers\API\v1\User;
 
 use Validator;
-use App\Models\User;
+use German\Models\User;
 use Illuminate\Http\Request;
-use  App\Http\Controllers\API\v1\BaseApiController as ApiController;
+use  German\Http\Controllers\API\v1\BaseApiController as ApiController;
 use JWTAuth;
 use Exception;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Exceptions\ModelsExceptions\DBException;
+use German\Exceptions\ModelsExceptions\DBException;
 use Illuminate\Support\Facades\Lang;
 
 class UserController extends ApiController
 {
+
+    protected $collections;
     /**
      * Create a new user controller instance.
      */
@@ -60,6 +62,7 @@ class UserController extends ApiController
 
         return response()->json(self::prepareResponse(true, $user), 200);
     }
+
     /**
      * Getting user list.
      *
@@ -83,7 +86,7 @@ class UserController extends ApiController
      * @param  integer  $id  Select user with passed id
      * @return json
      *
-     * @throws \App\Exceptions\ModelsExceptions\DBException
+     * @throws \German\Exceptions\ModelsExceptions\DBException
      */
     public function show ($id) {
         try {
@@ -101,7 +104,7 @@ class UserController extends ApiController
      * @param  \Illuminate\Http\Request $request
      * @return json
      *
-     * @throws \App\Exceptions\ModelsExceptions\DBException
+     * @throws \German\Exceptions\ModelsExceptions\DBException
      */
     public function update (Request $request) {
 

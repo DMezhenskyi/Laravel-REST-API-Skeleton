@@ -140,12 +140,12 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-        'Barryvdh\Cors\ServiceProvider',
+        German\Providers\AppServiceProvider::class,
+        German\Providers\AuthServiceProvider::class,
+        German\Providers\EventServiceProvider::class,
+        German\Providers\RouteServiceProvider::class,
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 

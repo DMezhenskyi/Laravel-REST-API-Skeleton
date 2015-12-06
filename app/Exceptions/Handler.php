@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Exceptions;
+namespace German\Exceptions;
 
-use App\Http\Controllers\API\v1\BaseApiController as ApiController;
+use German\Http\Controllers\API\v1\BaseApiController as ApiController;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use App\Exceptions\ModelsExceptions\DBException;
+use German\Exceptions\ModelsExceptions\DBException;
+use German\Exceptions\ModelsExceptions\PermitException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -52,6 +53,10 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof DBException) {
             return response()->json(ApiController::prepareResponse(false, [$e->getMessage()]), 500);
+        }
+
+        if ($e instanceof PermitException) {
+            return response()->json(ApiController::prepareResponse(false, [$e->getMessage()]), 401);
         }
 
         if ($e instanceof TokenExpiredException) {

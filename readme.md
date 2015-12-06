@@ -1,5 +1,5 @@
 ## API skeleton based on Laravel 5 framework
-This skeleton have been designed for quick deployment API with JWT authentication, registration and simple CRUD operations. for demo.
+This skeleton have been designed for quick deployment API with JWT authentication, registration and simple CRUD operations.
 ### Realised:
 - JWT authentication
 - Registration

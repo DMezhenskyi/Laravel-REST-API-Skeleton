@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'user' => App\Models\User::class,
+    'user' => German\Models\User::class,
 
     /*
     |--------------------------------------------------------------------------

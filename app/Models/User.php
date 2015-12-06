@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace German\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -36,4 +36,9 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public function words()
+    {
+        return $this->hasMany('German\Models\Progress');
+    }
 }

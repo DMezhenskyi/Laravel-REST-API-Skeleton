@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API\v1;
+namespace German\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller as Controller;
+use German\Http\Controllers\Controller as Controller;
 
 abstract class BaseApiController extends Controller
 {
@@ -14,7 +14,7 @@ abstract class BaseApiController extends Controller
      */
 
     public static function prepareResponse ($success, $data) {
-        if( $data === false )
+        if( $data === false || $data === null )
             $data = [];
         if ($success === true) {
             return ['success' => $success, 'data' => $data];

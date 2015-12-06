@@ -2,7 +2,7 @@
 
 use Exception;
 
-class DBException extends Exception
+class PermitException extends Exception
 {
 
 }
